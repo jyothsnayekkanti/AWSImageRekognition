@@ -1,7 +1,9 @@
 package com.josh.awsimagerekognition.resources;
 
 import com.amazonaws.services.rekognition.model.CompareFacesResult;
-import com.josh.awsimagerekognition.service.AmazonRekognitionClientService;
+import com.josh.awsimagerekognition.api.ExternalImagesInput;
+import com.josh.awsimagerekognition.api.RawImagesInput;
+import com.josh.awsimagerekognition.api.S3ImagesInput;
 import com.josh.awsimagerekognition.service.CompareFacesService;
 
 import javax.ws.rs.Consumes;
@@ -9,7 +11,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.nio.ByteBuffer;
 
 @Path("api/compareFaces")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,28 +24,34 @@ public class CompareFacesResource {
     }
 
     @Path("/s3")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    public CompareFacesResult compareFacesGivenS3Images(String sourceBucketName, String sourceFilePath, String targetBucketName, String targetFilePath){
+    public CompareFacesResult compareFacesGivenS3Images(S3ImagesInput s3ImagesInput){
 
-        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenS3Images(sourceBucketName, sourceFilePath, targetBucketName, targetFilePath);
+        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenS3Images(s3ImagesInput.getSourceBucketName(), s3ImagesInput.getSourceFilePath(), s3ImagesInput.getTargetBucketName(), s3ImagesInput.getTargetFilePath());
 
         return compareFacesResult;
     }
 
     @Path("/external")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    public CompareFacesResult compareFacesGivenExternalImages(String source, String target){
+    public CompareFacesResult compareFacesGivenExternalImages(ExternalImagesInput externalImagesInput){
 
-        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenExternalImages(source, target);
+        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenExternalImages(externalImagesInput.getSource(), externalImagesInput.getTarget());
 
         return compareFacesResult;
     }
 
     @Path("/raw")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    public CompareFacesResult compareFacesGivenImages(ByteBuffer sourceImage, ByteBuffer targetImage){
+    public CompareFacesResult compareFacesGivenImages(RawImagesInput rawImagesInput){
 
-        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenImages(sourceImage, targetImage);
+        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenImages(rawImagesInput.getSourceImage(), rawImagesInput.getTargetImage());
 
         return compareFacesResult;
     }
