@@ -1,5 +1,6 @@
 package com.josh.awsimagerekognition;
 
+import com.amazonaws.regions.Regions;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -11,10 +12,10 @@ public class AWSImageRekognitionConfiguration extends Configuration {
     private String profilesConfigFilePath;
 
     @JsonProperty
-    private String profileName;
+    private String profileName = "default";
 
     @JsonProperty
-    private String region;
+    private String region = Regions.DEFAULT_REGION.getName();
 
     public String getProfilesConfigFilePath(){ return profilesConfigFilePath; }
 

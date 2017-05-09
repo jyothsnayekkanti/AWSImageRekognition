@@ -1,3 +1,3 @@
 profilesConfigFilePath: E:/awsCredentials/credentials.txt
-profileName:
-region:
+profileName: default
+region: us-west-2

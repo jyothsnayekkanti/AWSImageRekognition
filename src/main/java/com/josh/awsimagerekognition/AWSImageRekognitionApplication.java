@@ -1,5 +1,6 @@
 package com.josh.awsimagerekognition;
 
+import com.josh.awsimagerekognition.health.AWSCredentialsHealthCheck;
 import com.josh.awsimagerekognition.resources.CompareFacesResource;
 import com.josh.awsimagerekognition.resources.ImageRekognitionResource;
 import com.josh.awsimagerekognition.service.AmazonRekognitionClientService;
@@ -26,10 +27,12 @@ public class AWSImageRekognitionApplication extends Application<AWSImageRekognit
     @Override
     public void run(AWSImageRekognitionConfiguration configuration, Environment environment) throws Exception {
 
-
         final CredentialService credentialService = new CredentialServiceImpl(configuration.getProfilesConfigFilePath(), configuration.getProfileName());
         final AmazonRekognitionClientService amazonRekognitionClientService = new AmazonRekognitionClientServiceImpl(credentialService, configuration.getRegion());
         final CompareFacesService compareFacesService = new CompareFacesServiceImpl(amazonRekognitionClientService);
+
+        final AWSCredentialsHealthCheck awsCredentialsHealthCheck = new AWSCredentialsHealthCheck(configuration.getProfilesConfigFilePath(), configuration.getProfileName());
+        environment.healthChecks().register("awsCredentialsHealthCheck", awsCredentialsHealthCheck);
 
         environment.jersey().register(credentialService);
         environment.jersey().register(amazonRekognitionClientService);
