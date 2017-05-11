@@ -15,6 +15,12 @@ public class AWSImageRekognitionConfiguration extends Configuration {
     private String profileName = "default";
 
     @JsonProperty
+    private Float compareFacesSimilarityThreshold;
+
+    @JsonProperty
+    private long imageInputStreamMaxSizeBinary;
+
+    @JsonProperty
     private String region = Regions.DEFAULT_REGION.getName();
 
     public String getProfilesConfigFilePath(){ return profilesConfigFilePath; }
@@ -23,4 +29,11 @@ public class AWSImageRekognitionConfiguration extends Configuration {
 
     public String getRegion(){ return region; }
 
+    public Float getCompareFacesSimilarityThreshold() {
+        return compareFacesSimilarityThreshold;
+    }
+
+    public long getImageInputStreamMaxSizeBinary() {
+        return imageInputStreamMaxSizeBinary;
+    }
 }

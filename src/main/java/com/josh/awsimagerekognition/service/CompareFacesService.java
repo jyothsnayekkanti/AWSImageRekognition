@@ -2,7 +2,8 @@ package com.josh.awsimagerekognition.service;
 
 import com.amazonaws.services.rekognition.model.CompareFacesResult;
 
-import java.nio.ByteBuffer;
+import java.io.IOException;
+import java.io.InputStream;
 
 public interface CompareFacesService{
 
@@ -10,6 +11,6 @@ public interface CompareFacesService{
 
     CompareFacesResult compareFacesGivenExternalImages(String source, String target);
 
-    CompareFacesResult compareFacesGivenImages(ByteBuffer sourceImage, ByteBuffer targetImage);
+    CompareFacesResult compareFacesGivenImages(InputStream sourceImage, InputStream targetImage)  throws IOException;
 
 }

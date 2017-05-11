@@ -1,28 +1,40 @@
 package com.josh.awsimagerekognition.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
+import java.io.InputStream;
 
-import java.nio.ByteBuffer;
+public class RawImagesInput /*(LimitedSizeInputStream)*/ extends InputStream {
 
-public class RawImagesInput {
+    private InputStream original;
+    private long maxSize;
+    private long total;
 
-    private ByteBuffer sourceImage;
-    private ByteBuffer targetImage;
-
-    public RawImagesInput(){}
-
-    public RawImagesInput(ByteBuffer sourceImage, ByteBuffer targetImage){
-        this.sourceImage = sourceImage;
-        this.targetImage = targetImage;
+    public RawImagesInput(InputStream original, long maxSize) {
+        this.original = original;
+        this.maxSize = maxSize;
     }
 
-    @JsonProperty
-    public ByteBuffer getSourceImage() {
-        return sourceImage;
+    @Override
+    public int read() throws IOException {
+        int i = original.read();
+        if (i>=0) incrementCounter(1);
+        return i;
     }
 
-    @JsonProperty
-    public ByteBuffer getTargetImage() {
-        return targetImage;
+    @Override
+    public int read(byte b[]) throws IOException {
+        return read(b, 0, b.length);
+    }
+
+    @Override
+    public int read(byte b[], int off, int len) throws IOException {
+        int i = original.read(b, off, len);
+        if (i>=0) incrementCounter(i);
+        return i;
+    }
+
+    private void incrementCounter(int size) throws IOException {
+        total += size;
+        if (total>maxSize) throw new IOException("InputStream exceeded maximum size in bytes.");
     }
 }

@@ -1,3 +1,5 @@
 profilesConfigFilePath: E:/awsCredentials/credentials.txt
 profileName: default
 region: us-west-2
+compareFacesSimilarityThreshold: 70F
+imageInputStreamMaxSizeBinary: 5242880

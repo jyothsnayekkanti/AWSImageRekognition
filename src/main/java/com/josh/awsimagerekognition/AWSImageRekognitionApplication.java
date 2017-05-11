@@ -12,6 +12,7 @@ import com.josh.awsimagerekognition.service.impl.CredentialServiceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 public class AWSImageRekognitionApplication extends Application<AWSImageRekognitionConfiguration> {
 
@@ -29,7 +30,9 @@ public class AWSImageRekognitionApplication extends Application<AWSImageRekognit
 
         final CredentialService credentialService = new CredentialServiceImpl(configuration.getProfilesConfigFilePath(), configuration.getProfileName());
         final AmazonRekognitionClientService amazonRekognitionClientService = new AmazonRekognitionClientServiceImpl(credentialService, configuration.getRegion());
-        final CompareFacesService compareFacesService = new CompareFacesServiceImpl(amazonRekognitionClientService);
+        final CompareFacesService compareFacesService = new CompareFacesServiceImpl(amazonRekognitionClientService, configuration.getCompareFacesSimilarityThreshold(), configuration.getImageInputStreamMaxSizeBinary());
+
+        environment.jersey().register(MultiPartFeature.class);
 
         final AWSCredentialsHealthCheck awsCredentialsHealthCheck = new AWSCredentialsHealthCheck(configuration.getProfilesConfigFilePath(), configuration.getProfileName());
         environment.healthChecks().register("awsCredentialsHealthCheck", awsCredentialsHealthCheck);
