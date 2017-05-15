@@ -41,9 +41,9 @@ public class CompareFacesResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    public CompareFacesResult compareFacesGivenExternalImages(ExternalImagesInput externalImagesInput){
+    public CompareFacesResult compareFacesGivenExternalImages(ExternalImagesInput externalImagesInput) throws IOException{
 
-        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenExternalImages(externalImagesInput.getSource(), externalImagesInput.getTarget());
+        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenExternalImages(externalImagesInput.getSourceLink(), externalImagesInput.getTargetLink());
 
         return compareFacesResult;
     }

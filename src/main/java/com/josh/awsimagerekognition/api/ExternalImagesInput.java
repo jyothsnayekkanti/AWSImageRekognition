@@ -4,23 +4,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ExternalImagesInput {
 
-    private String source;
-    private String target;
+    private String sourceLink;
+    private String targetLink;
 
     public ExternalImagesInput(){}
 
     public ExternalImagesInput(String source, String target){
-        this.source = source;
-        this.target = target;
+        this.sourceLink = source;
+        this.targetLink = target;
     }
 
     @JsonProperty
-    public String getSource() {
-        return source;
+    public String getSourceLink() {
+        return sourceLink;
     }
 
     @JsonProperty
-    public String getTarget() {
-        return target;
+    public String getTargetLink() {
+        return targetLink;
     }
 }

@@ -9,7 +9,7 @@ public interface CompareFacesService{
 
     CompareFacesResult compareFacesGivenS3Images(String sourceBucketName, String sourceFilePath, String targetBucketName, String targetFilePath);
 
-    CompareFacesResult compareFacesGivenExternalImages(String source, String target);
+    CompareFacesResult compareFacesGivenExternalImages(String source, String target) throws IOException;
 
     CompareFacesResult compareFacesGivenImages(InputStream sourceImage, InputStream targetImage)  throws IOException;
 

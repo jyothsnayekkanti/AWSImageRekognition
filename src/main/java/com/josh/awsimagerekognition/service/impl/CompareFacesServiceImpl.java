@@ -10,8 +10,10 @@ import com.josh.awsimagerekognition.api.RawImagesInput;
 import com.josh.awsimagerekognition.service.AmazonRekognitionClientService;
 import com.josh.awsimagerekognition.service.CompareFacesService;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.ByteBuffer;
 
 public class CompareFacesServiceImpl implements CompareFacesService {
@@ -30,32 +32,22 @@ public class CompareFacesServiceImpl implements CompareFacesService {
     public CompareFacesResult compareFacesGivenS3Images(String sourceBucketName, String sourceFilePath, String targetBucketName, String targetFilePath) {
         Image source = getImageUtil(sourceBucketName, sourceFilePath);
         Image target = getImageUtil(targetBucketName, targetFilePath);
-        Float similarityThreshold = 70F;
-
-        CompareFacesRequest compareFacesRequest = new CompareFacesRequest()
-                .withSourceImage(source)
-                .withTargetImage(target)
-                .withSimilarityThreshold(similarityThreshold);
-
-        return amazonRekognition.compareFaces(compareFacesRequest);
+        return callCompareFaces(source, target, similarityThreshold);
     }
 
     @Override
-    public CompareFacesResult compareFacesGivenExternalImages(String source, String target) {
-        return null;
+    public CompareFacesResult compareFacesGivenExternalImages(String sourceLink, String targetLink) throws IOException {
+        Image source = getImageUtilGivenImageBytes(getBinaryImageFromURL(sourceLink));
+        Image target = getImageUtilGivenImageBytes(getBinaryImageFromURL(targetLink));
+        return callCompareFaces(source, target, similarityThreshold);
     }
 
     @Override
     public CompareFacesResult compareFacesGivenImages(InputStream sourceImage, InputStream targetImage) throws IOException {
         Image source = getImageUtilGivenImageBytes(getBinaryImageFronInputStream(sourceImage));
         Image target = getImageUtilGivenImageBytes(getBinaryImageFronInputStream(targetImage));
+        return callCompareFaces(source, target, similarityThreshold);
 
-        CompareFacesRequest compareFacesRequest = new CompareFacesRequest()
-                .withSourceImage(source)
-                .withTargetImage(target)
-                .withSimilarityThreshold(similarityThreshold);
-
-        return amazonRekognition.compareFaces(compareFacesRequest);
     }
 
     private Image getImageUtil(String bucket, String key) {
@@ -72,6 +64,20 @@ public class CompareFacesServiceImpl implements CompareFacesService {
 
     private ByteBuffer getBinaryImageFronInputStream(InputStream inputStream) throws IOException {
         return ByteBuffer.wrap(IOUtils.toByteArray(new RawImagesInput(inputStream, imageInputStreamMaxSizeBinary )));
+    }
+
+    private ByteBuffer getBinaryImageFromURL(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        BufferedInputStream inputStream = new BufferedInputStream(url.openStream());
+        return ByteBuffer.wrap(IOUtils.toByteArray(new RawImagesInput(inputStream, imageInputStreamMaxSizeBinary )));
+    }
+
+    private CompareFacesResult callCompareFaces(Image source,Image target, Float similarityThreshold){
+        CompareFacesRequest compareFacesRequest = new CompareFacesRequest()
+                .withSourceImage(source)
+                .withTargetImage(target)
+                .withSimilarityThreshold(similarityThreshold);
+        return amazonRekognition.compareFaces(compareFacesRequest);
     }
 
 }
