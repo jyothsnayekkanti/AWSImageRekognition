@@ -34,6 +34,7 @@ public class CompareFacesResource {
 
         CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenS3Images(s3ImagesInput.getSourceBucketName(), s3ImagesInput.getSourceFilePath(), s3ImagesInput.getTargetBucketName(), s3ImagesInput.getTargetFilePath());
 
+
         return compareFacesResult;
     }
 
@@ -41,11 +42,15 @@ public class CompareFacesResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    public CompareFacesResult compareFacesGivenExternalImages(ExternalImagesInput externalImagesInput) throws IOException{
+    public Response compareFacesGivenExternalImages(ExternalImagesInput externalImagesInput){
 
-        CompareFacesResult compareFacesResult = compareFacesService.compareFacesGivenExternalImages(externalImagesInput.getSourceLink(), externalImagesInput.getTargetLink());
-
-        return compareFacesResult;
+        CompareFacesResult compareFacesResult = null;
+        try {
+            compareFacesResult = compareFacesService.compareFacesGivenExternalImages(externalImagesInput.getSourceLink(), externalImagesInput.getTargetLink());
+            return Response.ok(compareFacesResult).build();
+        } catch (IOException e) {
+            return Response.status(Response.Status.PRECONDITION_FAILED).entity(e.getMessage()).build();
+        }
     }
 
     @Path("/raw")
