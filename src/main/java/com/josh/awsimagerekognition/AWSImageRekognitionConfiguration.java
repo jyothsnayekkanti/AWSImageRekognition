@@ -23,6 +23,12 @@ public class AWSImageRekognitionConfiguration extends Configuration {
     @JsonProperty
     private String region = Regions.DEFAULT_REGION.getName();
 
+    @JsonProperty
+    private Float detectLabelsMinConfidence;
+
+    @JsonProperty
+    private int maxLabels;
+
     public String getProfilesConfigFilePath(){ return profilesConfigFilePath; }
 
     public String getProfileName(){ return profileName; }
@@ -36,4 +42,8 @@ public class AWSImageRekognitionConfiguration extends Configuration {
     public long getImageInputStreamMaxSizeBinary() {
         return imageInputStreamMaxSizeBinary;
     }
+
+    public Float getDetectLabelsMinConfidence() { return detectLabelsMinConfidence; }
+
+    public int getMaxLabels(){ return maxLabels; }
 }

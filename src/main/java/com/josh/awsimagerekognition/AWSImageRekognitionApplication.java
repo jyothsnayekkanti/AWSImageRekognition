@@ -2,13 +2,16 @@ package com.josh.awsimagerekognition;
 
 import com.josh.awsimagerekognition.health.AWSCredentialsHealthCheck;
 import com.josh.awsimagerekognition.resources.CompareFacesResource;
+import com.josh.awsimagerekognition.resources.DetectLabelsResource;
 import com.josh.awsimagerekognition.resources.ImageRekognitionResource;
 import com.josh.awsimagerekognition.service.AmazonRekognitionClientService;
 import com.josh.awsimagerekognition.service.CompareFacesService;
 import com.josh.awsimagerekognition.service.CredentialService;
+import com.josh.awsimagerekognition.service.DetectLabelsService;
 import com.josh.awsimagerekognition.service.impl.AmazonRekognitionClientServiceImpl;
 import com.josh.awsimagerekognition.service.impl.CompareFacesServiceImpl;
 import com.josh.awsimagerekognition.service.impl.CredentialServiceImpl;
+import com.josh.awsimagerekognition.service.impl.DetectLabelsServiceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -31,6 +34,7 @@ public class AWSImageRekognitionApplication extends Application<AWSImageRekognit
         final CredentialService credentialService = new CredentialServiceImpl(configuration.getProfilesConfigFilePath(), configuration.getProfileName());
         final AmazonRekognitionClientService amazonRekognitionClientService = new AmazonRekognitionClientServiceImpl(credentialService, configuration.getRegion());
         final CompareFacesService compareFacesService = new CompareFacesServiceImpl(amazonRekognitionClientService, configuration.getCompareFacesSimilarityThreshold(), configuration.getImageInputStreamMaxSizeBinary());
+        final DetectLabelsService detectLabelsService = new DetectLabelsServiceImpl(amazonRekognitionClientService, configuration.getDetectLabelsMinConfidence(), configuration.getMaxLabels(), configuration.getImageInputStreamMaxSizeBinary());
 
         environment.jersey().register(MultiPartFeature.class);
 
@@ -39,8 +43,10 @@ public class AWSImageRekognitionApplication extends Application<AWSImageRekognit
 
         environment.jersey().register(credentialService);
         environment.jersey().register(amazonRekognitionClientService);
+        environment.jersey().register(detectLabelsService);
         environment.jersey().register(new ImageRekognitionResource(amazonRekognitionClientService));
         environment.jersey().register(new CompareFacesResource(compareFacesService));
+        environment.jersey().register(new DetectLabelsResource(detectLabelsService));
 
 
     }
