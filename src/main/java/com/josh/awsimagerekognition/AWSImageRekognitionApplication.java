@@ -12,6 +12,7 @@ import com.josh.awsimagerekognition.service.impl.AmazonRekognitionClientServiceI
 import com.josh.awsimagerekognition.service.impl.CompareFacesServiceImpl;
 import com.josh.awsimagerekognition.service.impl.CredentialServiceImpl;
 import com.josh.awsimagerekognition.service.impl.DetectLabelsServiceImpl;
+import com.josh.awsimagerekognition.utils.ImageUtility;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -33,17 +34,15 @@ public class AWSImageRekognitionApplication extends Application<AWSImageRekognit
 
         final CredentialService credentialService = new CredentialServiceImpl(configuration.getProfilesConfigFilePath(), configuration.getProfileName());
         final AmazonRekognitionClientService amazonRekognitionClientService = new AmazonRekognitionClientServiceImpl(credentialService, configuration.getRegion());
-        final CompareFacesService compareFacesService = new CompareFacesServiceImpl(amazonRekognitionClientService, configuration.getCompareFacesSimilarityThreshold(), configuration.getImageInputStreamMaxSizeBinary());
-        final DetectLabelsService detectLabelsService = new DetectLabelsServiceImpl(amazonRekognitionClientService, configuration.getDetectLabelsMinConfidence(), configuration.getMaxLabels(), configuration.getImageInputStreamMaxSizeBinary());
+        final ImageUtility imageUtility = new ImageUtility(configuration.getImageInputStreamMaxSizeBinary());
+        final CompareFacesService compareFacesService = new CompareFacesServiceImpl(amazonRekognitionClientService, configuration.getCompareFacesSimilarityThreshold(), imageUtility);
+        final DetectLabelsService detectLabelsService = new DetectLabelsServiceImpl(amazonRekognitionClientService, configuration.getDetectLabelsMinConfidence(), configuration.getDetectLabelsMaxLabels(), configuration.getImageInputStreamMaxSizeBinary());
 
         environment.jersey().register(MultiPartFeature.class);
 
         final AWSCredentialsHealthCheck awsCredentialsHealthCheck = new AWSCredentialsHealthCheck(configuration.getProfilesConfigFilePath(), configuration.getProfileName());
         environment.healthChecks().register("awsCredentialsHealthCheck", awsCredentialsHealthCheck);
 
-        environment.jersey().register(credentialService);
-        environment.jersey().register(amazonRekognitionClientService);
-        environment.jersey().register(detectLabelsService);
         environment.jersey().register(new ImageRekognitionResource(amazonRekognitionClientService));
         environment.jersey().register(new CompareFacesResource(compareFacesService));
         environment.jersey().register(new DetectLabelsResource(detectLabelsService));
