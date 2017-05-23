@@ -36,7 +36,7 @@ public class AWSImageRekognitionApplication extends Application<AWSImageRekognit
         final AmazonRekognitionClientService amazonRekognitionClientService = new AmazonRekognitionClientServiceImpl(credentialService, configuration.getRegion());
         final ImageUtility imageUtility = new ImageUtility(configuration.getImageInputStreamMaxSizeBinary());
         final CompareFacesService compareFacesService = new CompareFacesServiceImpl(amazonRekognitionClientService, configuration.getCompareFacesSimilarityThreshold(), imageUtility);
-        final DetectLabelsService detectLabelsService = new DetectLabelsServiceImpl(amazonRekognitionClientService, configuration.getDetectLabelsMinConfidence(), configuration.getDetectLabelsMaxLabels(), configuration.getImageInputStreamMaxSizeBinary());
+        final DetectLabelsService detectLabelsService = new DetectLabelsServiceImpl(amazonRekognitionClientService, configuration.getDetectLabelsMinConfidence(), configuration.getDetectLabelsMaxLabels(), imageUtility);
 
         environment.jersey().register(MultiPartFeature.class);
 
