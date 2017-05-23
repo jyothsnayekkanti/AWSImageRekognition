@@ -1,6 +1,7 @@
 package com.josh.awsimagerekognition.resources;
 
 import com.amazonaws.services.rekognition.model.DetectLabelsResult;
+import com.josh.awsimagerekognition.api.ExternalImageURL;
 import com.josh.awsimagerekognition.api.S3ImageParameters;
 import com.josh.awsimagerekognition.service.DetectLabelsService;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -41,11 +42,11 @@ public class DetectLabelsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @POST
-    public Response detectLabelsGivenExternalImages(String imageURL){
+    public Response detectLabelsGivenExternalImages(ExternalImageURL imageURL){
 
         DetectLabelsResult detectLabelsResult = null;
         try {
-            detectLabelsResult = detectLabelsService.detectLabelsGivenExternalImage(imageURL);
+            detectLabelsResult = detectLabelsService.detectLabelsGivenExternalImage(imageURL.getImageURL());
             return Response.ok(detectLabelsResult).build();
         } catch (IOException e) {
             return Response.status(Response.Status.PRECONDITION_FAILED).entity(e.getMessage()).build();

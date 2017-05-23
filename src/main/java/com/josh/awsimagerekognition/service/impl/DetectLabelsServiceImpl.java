@@ -31,12 +31,14 @@ public class DetectLabelsServiceImpl implements DetectLabelsService {
 
     @Override
     public DetectLabelsResult detectLabelsGivenExternalImage(String imageURL) throws IOException {
-        return null;
+        Image image = imageUtility.getImageUtilGivenImageBytes(imageUtility.getBinaryImageFromURL(imageURL));
+        return callDetectLabels(image, maxLabels, minConfidence);
     }
 
     @Override
-    public DetectLabelsResult detectLabelsGivenImage(InputStream fileInputStream) throws IOException {
-        return null;
+    public DetectLabelsResult detectLabelsGivenImage(InputStream imageInputStream) throws IOException {
+        Image image = imageUtility.getImageUtilGivenImageBytes(imageUtility.getBinaryImageFronInputStream(imageInputStream));
+        return callDetectLabels(image, maxLabels, minConfidence);
     }
 
     private DetectLabelsResult callDetectLabels(Image image, int maxLabels, Float minConfidence){
