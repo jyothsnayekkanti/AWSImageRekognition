@@ -5,3 +5,4 @@ compareFacesSimilarityThreshold: 70F
 imageInputStreamMaxSizeBinary: 5242880
 detectLabelsMaxLabels: 6
 detectLabelsMinConfidence: 70F
+detectModerationLabelsMinConfidence: 70F

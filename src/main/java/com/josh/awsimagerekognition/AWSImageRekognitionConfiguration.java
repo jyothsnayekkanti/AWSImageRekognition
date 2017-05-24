@@ -29,6 +29,9 @@ public class AWSImageRekognitionConfiguration extends Configuration {
     @JsonProperty
     private int detectLabelsMaxLabels;
 
+    @JsonProperty
+    private Float detectModerationLabelsMinConfidence;
+
     public String getProfilesConfigFilePath(){ return profilesConfigFilePath; }
 
     public String getProfileName(){ return profileName; }
@@ -46,4 +49,6 @@ public class AWSImageRekognitionConfiguration extends Configuration {
     public Float getDetectLabelsMinConfidence() { return detectLabelsMinConfidence; }
 
     public int getDetectLabelsMaxLabels(){ return detectLabelsMaxLabels; }
+
+    public Float getDetectModerationLabelsMinConfidence() { return detectModerationLabelsMinConfidence; }
 }
