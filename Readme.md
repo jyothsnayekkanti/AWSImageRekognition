@@ -57,7 +57,7 @@ Don't forget to update config file path and other properties as per your require
 
 * Run the jar file or deploy it as a service
 ```
-java -jar <josh-aws-imagerekognition-1.0>.jar server awsimagerekognition.yaml
+java -jar josh-aws-imagerekognition-1.0.jar server awsimagerekognition.yaml
 ```
 
 
