@@ -12,7 +12,7 @@ public class AWSImageRekognitionConfiguration extends Configuration {
     private String profilesConfigFilePath;
 
     @JsonProperty
-    private String profileName = "default";
+    private String profileName = "jyothsna";
 
     @JsonProperty
     private Float compareFacesSimilarityThreshold;
