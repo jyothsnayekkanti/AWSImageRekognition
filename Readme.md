@@ -11,7 +11,7 @@ seamlessly with Amazon S3, AWS Lambda, and other AWS services.
 
 #### Use cases exposed in this project include
 * [Face-based user verification](#face-based-user-verification)
-* [Demographic analysis](#detecting-labels)
+* [Demographic analysis (Detecting Labels)](#detecting-labels)
 * [Image Moderation](#moderating-images)
 
 APIs for each use cases above can take input images as follows
